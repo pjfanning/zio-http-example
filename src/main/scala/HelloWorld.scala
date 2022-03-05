@@ -13,6 +13,6 @@ object HelloWorld extends ZIOAppDefault {
   }
 
   // Run it like any simple app
-  override def run: URIO[Any, ExitCode] =
-    Server.start(8090, app).exitCode
+  override val run =
+    Server.start(8090, app)
 }
