@@ -1,8 +1,7 @@
 package example
 
 import com.github.pjfanning.zio.micrometer.Counter
-import com.github.pjfanning.zio.micrometer.safe.Counter
-import com.github.pjfanning.zio.micrometer.unsafe.Registry
+import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry}
 import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import zhttp.http.*
 import zhttp.service.Server
