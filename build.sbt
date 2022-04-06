@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
       "io.d11" %% "zhttp" % "2.0.0-RC6",
-      "com.github.pjfanning" %% "zio-metrics-micrometer" % "0.20.0-SNAPSHOT" changing(),
+      "com.github.pjfanning" %% "zio-metrics-micrometer" % "0.20.0",
       "io.micrometer" %  "micrometer-registry-prometheus" % "1.8.4"
     )
   )
