@@ -10,6 +10,6 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "io.d11" %% "zhttp" % "2.0.0-RC6",
       "com.github.pjfanning" %% "zio-metrics-micrometer" % "0.20.1",
-      "io.micrometer" %  "micrometer-registry-prometheus" % "1.8.4"
+      "io.micrometer" %  "micrometer-registry-prometheus" % "1.8.5"
     )
   )
