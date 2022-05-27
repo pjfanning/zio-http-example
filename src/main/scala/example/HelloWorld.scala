@@ -1,11 +1,14 @@
 package example
 
 import com.github.pjfanning.zio.micrometer.Counter
-import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry}
+import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry, Timer}
 import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import zhttp.http.*
 import zhttp.service.Server
-import zio.{Clock, ZIO, ZIOAppDefault}
+import zio.{Clock, Duration, ZIO, ZIOAppDefault}
+
+import java.util.concurrent.TimeUnit
+import scala.util.Random
 
 object HelloWorld extends ZIOAppDefault {
 
@@ -28,6 +31,15 @@ object HelloWorld extends ZIOAppDefault {
     case Method.GET -> !! / "json" => {
       ZIO.succeed(Response.json("""{"greetings": "Hello World!"}""")).zipPar(
         recordCount("get", "json").provideLayer(metricEnv))
+    }
+    case Method.GET -> !! / "timed" => {
+      val zio = for {
+        t <- Timer.labelled("http_timed", Some("HTTP timed"), Seq("method", "path"))
+        timer <- t(Seq("get", "timed")).startTimerSample()
+        _ <- ZIO.sleep(Duration(Random.nextInt(500), TimeUnit.MILLISECONDS))
+        _ <- timer.stop()
+      } yield Response.text("Hello World!")
+      zio.provideLayer(metricEnv)
     }
     case Method.GET -> !! / "metrics" => {
       ZIO.succeed(Response.text(registry.scrape()))
