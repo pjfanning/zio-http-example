@@ -12,6 +12,7 @@ sbt run
 ```
 curl -v http://localhost:8090/json
 curl -v http://localhost:8090/text
+curl -v http://localhost:8090/timed
 ```
 
 After a few calls to these endpoints, you can get count metrics in [Prometheus](https://prometheus.io/) format by calling:
