@@ -5,7 +5,7 @@ import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry, Timer}
 import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import zhttp.http.*
 import zhttp.service.Server
-import zio.{Clock, Duration, ZIO, ZIOAppDefault}
+import zio.{Duration, ZIO, ZIOAppDefault}
 
 import java.util.concurrent.TimeUnit
 import scala.util.Random
@@ -13,7 +13,7 @@ import scala.util.Random
 object HelloWorld extends ZIOAppDefault {
 
   private val registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-  private val metricEnv = Clock.live ++ Registry.makeWith(registry)
+  private val metricEnv = Registry.makeWith(registry)
 
   private def recordCount(method: String, path: String) = {
     for {
