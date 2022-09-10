@@ -1,6 +1,6 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.1.3"
+ThisBuild / scalaVersion := "3.2.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -8,8 +8,8 @@ lazy val root = (project in file("."))
     resolvers +=
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
-      "io.d11" %% "zhttp" % "2.0.0-RC10",
+      "io.d11" %% "zhttp" % "2.0.0-RC11",
       "com.github.pjfanning" %% "zio-metrics-micrometer" % "0.20.6",
-      "io.micrometer" %  "micrometer-registry-prometheus" % "1.9.1"
+      "io.micrometer" %  "micrometer-registry-prometheus" % "1.9.3"
     )
   )
