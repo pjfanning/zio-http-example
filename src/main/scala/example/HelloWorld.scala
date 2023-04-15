@@ -3,8 +3,7 @@ package example
 import com.github.pjfanning.zio.micrometer.Counter
 import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry, Timer}
 import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
-import zhttp.http.*
-import zhttp.service.Server
+import zio.http.*
 import zio.{Duration, ZIO, ZIOAppDefault}
 
 import java.util.concurrent.TimeUnit
@@ -48,5 +47,5 @@ object HelloWorld extends ZIOAppDefault {
 
   // Run it like any simple app
   override val run =
-    Server.start(8090, app)
+    Server.serve(app).provide(Server.defaultWithPort(8090))
 }
