@@ -23,15 +23,15 @@ object HelloWorld extends ZIOAppDefault {
 
   // Create HTTP route
   val app: HttpApp[Any, Nothing] = Http.collectZIO[Request] {
-    case Method.GET -> !! / "text" => {
+    case Method.GET -> Root / "text" => {
       ZIO.succeed(Response.text("Hello World!")).zipPar(
         recordCount("get", "text").provideLayer(metricEnv))
     }
-    case Method.GET -> !! / "json" => {
+    case Method.GET -> Root / "json" => {
       ZIO.succeed(Response.json("""{"greetings": "Hello World!"}""")).zipPar(
         recordCount("get", "json").provideLayer(metricEnv))
     }
-    case Method.GET -> !! / "timed" => {
+    case Method.GET -> Root / "timed" => {
       val zio = for {
         t <- Timer.labelled("http_timed", Some("HTTP timed"), Seq("method", "path"))
         timer <- t(Seq("get", "timed")).startTimerSample()
@@ -40,7 +40,7 @@ object HelloWorld extends ZIOAppDefault {
       } yield Response.text("Hello World!")
       zio.provideLayer(metricEnv)
     }
-    case Method.GET -> !! / "metrics" => {
+    case Method.GET -> Root / "metrics" => {
       ZIO.succeed(Response.text(registry.scrape()))
     }
   }
