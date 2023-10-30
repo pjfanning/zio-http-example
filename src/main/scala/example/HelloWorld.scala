@@ -1,6 +1,5 @@
 package example
 
-import com.github.pjfanning.zio.micrometer.Counter
 import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry, Timer}
 import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import zio.http.*
@@ -21,17 +20,23 @@ object HelloWorld extends ZIOAppDefault {
     } yield result
   }
 
-  // Create HTTP route
-  val app: HttpApp[Any, Nothing] = Http.collectZIO[Request] {
-    case Method.GET -> Root / "text" => {
+  // Create HTTP routes
+  val textApp: HttpApp[Any] = Routes(
+    Method.GET / "text" -> handler { (_: Request) =>
       ZIO.succeed(Response.text("Hello World!")).zipPar(
         recordCount("get", "text").provideLayer(metricEnv))
     }
-    case Method.GET -> Root / "json" => {
+  ).toHttpApp
+
+  val jsonApp: HttpApp[Any] = Routes(
+    Method.GET / "json" -> handler { (_: Request) =>
       ZIO.succeed(Response.json("""{"greetings": "Hello World!"}""")).zipPar(
         recordCount("get", "json").provideLayer(metricEnv))
     }
-    case Method.GET -> Root / "timed" => {
+  ).toHttpApp
+
+  val timedApp: HttpApp[Any] = Routes(
+    Method.GET / "timed" -> handler { (_: Request) =>
       val zio = for {
         t <- Timer.labelled("http_timed", Some("HTTP timed"), Seq("method", "path"))
         timer <- t(Seq("get", "timed")).startTimerSample()
@@ -40,10 +45,15 @@ object HelloWorld extends ZIOAppDefault {
       } yield Response.text("Hello World!")
       zio.provideLayer(metricEnv)
     }
-    case Method.GET -> Root / "metrics" => {
-      ZIO.succeed(Response.text(registry.scrape()))
+  ).toHttpApp
+
+  val metricsApp: HttpApp[Any] = Routes(
+    Method.GET / "metrics" -> handler { (_: Request) =>
+      Response.text(registry.scrape())
     }
-  }
+  ).toHttpApp
+
+  val app: HttpApp[Any] = textApp ++ jsonApp ++ timedApp ++ metricsApp
 
   // Run it like any simple app
   override val run =
