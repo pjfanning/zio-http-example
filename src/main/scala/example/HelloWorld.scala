@@ -1,7 +1,7 @@
 package example
 
 import com.github.pjfanning.zio.micrometer.safe.{Counter, Registry, Timer}
-import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
+import io.micrometer.prometheusmetrics.{PrometheusConfig, PrometheusMeterRegistry}
 import zio.http.*
 import zio.{Duration, ZIO, ZIOAppDefault}
 
