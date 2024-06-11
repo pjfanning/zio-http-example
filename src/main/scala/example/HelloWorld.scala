@@ -21,21 +21,21 @@ object HelloWorld extends ZIOAppDefault {
   }
 
   // Create HTTP routes
-  val textApp: HttpApp[Any] = Routes(
+  val textApp = Routes(
     Method.GET / "text" -> handler { (_: Request) =>
       ZIO.succeed(Response.text("Hello World!")).zipPar(
         recordCount("get", "text").provideLayer(metricEnv))
     }
-  ).toHttpApp
+  )
 
-  val jsonApp: HttpApp[Any] = Routes(
+  val jsonApp = Routes(
     Method.GET / "json" -> handler { (_: Request) =>
       ZIO.succeed(Response.json("""{"greetings": "Hello World!"}""")).zipPar(
         recordCount("get", "json").provideLayer(metricEnv))
     }
-  ).toHttpApp
+  )
 
-  val timedApp: HttpApp[Any] = Routes(
+  val timedApp = Routes(
     Method.GET / "timed" -> handler { (_: Request) =>
       val zio = for {
         t <- Timer.labelled("http_timed", Some("HTTP timed"), Seq("method", "path"))
@@ -45,15 +45,15 @@ object HelloWorld extends ZIOAppDefault {
       } yield Response.text("Hello World!")
       zio.provideLayer(metricEnv)
     }
-  ).toHttpApp
+  )
 
-  val metricsApp: HttpApp[Any] = Routes(
+  val metricsApp = Routes(
     Method.GET / "metrics" -> handler { (_: Request) =>
       Response.text(registry.scrape())
     }
-  ).toHttpApp
+  )
 
-  val app: HttpApp[Any] = textApp ++ jsonApp ++ timedApp ++ metricsApp
+  val app = textApp ++ jsonApp ++ timedApp ++ metricsApp
 
   // Run it like any simple app
   override val run =
