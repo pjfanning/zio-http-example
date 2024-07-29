@@ -8,9 +8,9 @@ lazy val root = (project in file("."))
     resolvers +=
       "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio-http" % "3.0.0-RC8",
-      "dev.zio" %% "zio" % "2.1.2",
+      "dev.zio" %% "zio-http" % "3.0.0-RC9",
+      "dev.zio" %% "zio" % "2.1.6",
       "com.github.pjfanning" %% "zio-metrics-micrometer" % "0.21.0",
-      "io.micrometer" % "micrometer-registry-prometheus" % "1.13.0"
+      "io.micrometer" % "micrometer-registry-prometheus" % "1.13.2"
     )
   )
